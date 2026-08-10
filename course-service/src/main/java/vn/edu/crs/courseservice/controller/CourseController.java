@@ -1,13 +1,13 @@
 package vn.edu.crs.courseservice.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.crs.courseservice.dto.CourseRequest;
 import vn.edu.crs.courseservice.dto.CourseResponse;
 import vn.edu.crs.courseservice.service.CourseService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/courses")
@@ -20,8 +20,8 @@ public class CourseController {
     }
 
     @GetMapping
-    public List<CourseResponse> getCourses() {
-        return courseService.getAllCourses();
+    public Page<CourseResponse> search(@RequestParam(required = false) String keyword, Pageable pageable) {
+        return courseService.search(keyword, pageable);
     }
 
     @GetMapping("/{id}")

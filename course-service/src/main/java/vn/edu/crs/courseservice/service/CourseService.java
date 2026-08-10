@@ -1,12 +1,14 @@
 package vn.edu.crs.courseservice.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vn.edu.crs.courseservice.dto.CourseRequest;
 import vn.edu.crs.courseservice.dto.CourseResponse;
 import vn.edu.crs.courseservice.entity.Course;
 import vn.edu.crs.courseservice.repository.CourseRepository;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -16,13 +18,6 @@ public class CourseService {
 
     public CourseService(CourseRepository courseRepository) {
         this.courseRepository = courseRepository;
-    }
-
-    public List<CourseResponse> getAllCourses() {
-        return courseRepository.findAll()
-                .stream()
-                .map(this::toResponse)
-                .toList();
     }
 
     public CourseResponse getCourseById(Long id) {
@@ -63,6 +58,34 @@ public class CourseService {
             throw new NoSuchElementException("Khong tim thay mon hoc id = " + id);
         }
         courseRepository.deleteById(id);
+    }
+
+    public Page<CourseResponse> search(String keyword, Pageable pageable) {
+        Page<Course> page = (keyword == null || keyword.isBlank())
+                ? courseRepository.findAll(pageable)
+                : courseRepository.findByTenMonHocContainingIgnoreCase(keyword, pageable);
+        return page.map(this::toResponse);
+    }
+
+    @Transactional
+    public CourseResponse reserveSeat(Long id) {
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Khong tim thay mon hoc id = " + id));
+        if (course.getSoChoConLai() <= 0) {
+            throw new IllegalStateException("Mon hoc da het cho, khong the dang ky");
+        }
+        course.setSoChoConLai(course.getSoChoConLai() - 1);
+        return toResponse(courseRepository.save(course));
+    }
+
+    @Transactional
+    public CourseResponse releaseSeat(Long id) {
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Khong tim thay mon hoc id = " + id));
+        if (course.getSoChoConLai() < course.getSoChoToiDa()) {
+            course.setSoChoConLai(course.getSoChoConLai() + 1);
+        }
+        return toResponse(courseRepository.save(course));
     }
 
     private CourseResponse toResponse(Course course) {
