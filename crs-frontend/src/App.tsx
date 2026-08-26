@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react';
-import { getCourses } from './api/courseApi';
-import type { Course } from './types/course';
+import { useCallback, useState } from 'react';
+import { useCourses } from './api/useCourses';
+import SearchBox from './components/SearchBox';
+import CourseList from './components/CourseList';
+import Pagination from './components/Pagination';
 import './App.css';
 
 function App() {
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [keyword, setKeyword] = useState('');
+  const [page, setPage] = useState(0);
+  const { courses, totalPages, state, errorMessage, refetch } = useCourses(keyword, page);
 
-  useEffect(() => {
-    getCourses()
-      .then((res) => setCourses(res.data.content))
-      .catch(() => setError('Khong the ket noi den api-gateway. Kiem tra lai cac service da chay chua.'))
-      .finally(() => setLoading(false));
+  const handleSearch = useCallback((newKeyword: string) => {
+    setKeyword(newKeyword);
+    setPage(0);
   }, []);
 
   return (
@@ -21,53 +21,23 @@ function App() {
         <div className="page__header">
           <div>
             <h1 className="page__title">Danh sach mon hoc</h1>
-            <p className="page__subtitle">Test ket noi Frontend &rarr; API Gateway (localhost:8080)</p>
+            <p className="page__subtitle">Tim kiem va phan trang qua API Gateway (localhost:8080)</p>
           </div>
-          <span className="badge">
-            <span className="badge__dot" />
-            {courses.length} mon hoc
-          </span>
+          {state === 'success' && (
+            <span className="badge">
+              <span className="badge__dot" />
+              {courses.length} mon hoc
+            </span>
+          )}
         </div>
 
-        {error && <div className="alert">{error}</div>}
+        <div className="toolbar">
+          <SearchBox onSearch={handleSearch} />
+        </div>
 
-        {loading && !error && (
-          <div className="state">
-            <div className="spinner" />
-            Dang tai du lieu...
-          </div>
-        )}
+        <CourseList courses={courses} state={state} errorMessage={errorMessage} onRetry={refetch} />
 
-        {!loading && !error && (
-          <div className="course-grid">
-            {courses.map((course) => {
-              const isFull = course.soChoConLai === 0;
-              const percentFilled = Math.round(
-                ((course.soChoToiDa - course.soChoConLai) / course.soChoToiDa) * 100,
-              );
-              return (
-                <div className="course-card" key={course.id}>
-                  <h2 className="course-card__name">{course.tenMonHoc}</h2>
-                  <span className="course-card__credits">{course.soTinChi} tin chi</span>
-                  <div className="seat-bar">
-                    <div
-                      className={`seat-bar__fill${isFull ? ' seat-bar__fill--full' : ''}`}
-                      style={{ width: `${percentFilled}%` }}
-                    />
-                  </div>
-                  <div className="seat-info">
-                    <span>
-                      Con lai {course.soChoConLai}/{course.soChoToiDa} cho
-                    </span>
-                    <span className={`seat-tag ${isFull ? 'seat-tag--full' : 'seat-tag--open'}`}>
-                      {isFull ? 'Het cho' : 'Con cho'}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
+        <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
       </div>
     </div>
   );

@@ -96,6 +96,35 @@
   margin-bottom: 20px;
 }
 
+.alert--column {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.btn:hover {
+  opacity: 0.85;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn--danger {
+  background: var(--danger);
+  color: #fff;
+}
+
 .state {
   display: flex;
   flex-direction: column;
@@ -105,6 +134,118 @@
   padding: 64px 0;
   color: var(--text-muted);
   font-size: 14px;
+}
+
+.state__icon {
+  font-size: 28px;
+}
+
+.toolbar {
+  margin-bottom: 20px;
+}
+
+.search-box {
+  position: relative;
+  max-width: 420px;
+}
+
+.search-box__icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.search-box__input {
+  width: 100%;
+  padding: 10px 36px 10px 36px;
+  font-size: 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  box-sizing: border-box;
+}
+
+.search-box__input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.search-box__clear {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.search-box__clear:hover {
+  color: var(--text);
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 28px;
+}
+
+.pagination__pages {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pagination__nav,
+.pagination__page {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.pagination__page {
+  min-width: 34px;
+  text-align: center;
+  padding: 6px 8px;
+}
+
+.pagination__nav:hover:not(:disabled),
+.pagination__page:hover {
+  background: var(--primary-soft);
+}
+
+.pagination__nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination__page--active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+.pagination__ellipsis {
+  padding: 0 4px;
+  color: var(--text-muted);
 }
 
 .spinner {
