@@ -6,6 +6,7 @@ import SearchBox from './components/SearchBox';
 import CourseList from './components/CourseList';
 import Pagination from './components/Pagination';
 import CourseForm from './components/CourseForm';
+import Modal from './components/Modal';
 import type { Course, CourseFormValues } from './types/course';
 import type { ApiErrorResponse } from './types/apiError';
 import './App.css';
@@ -13,6 +14,7 @@ import './App.css';
 function App() {
   const [keyword, setKeyword] = useState('');
   const [page, setPage] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
@@ -45,12 +47,31 @@ function App() {
         await createCourse(values);
       }
       setEditingCourse(null);
+      setIsModalOpen(false);
       refetch();
     } catch (err) {
       setFormError(extractErrorMessage(err));
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingCourse(null);
+    setFormError(null);
+  };
+
+  const handleOpenAddForm = () => {
+    setEditingCourse(null);
+    setFormError(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEditCourse = (course: Course) => {
+    setEditingCourse(course);
+    setFormError(null);
+    setIsModalOpen(true);
   };
 
   const handleDelete = async (course: Course) => {
@@ -79,15 +100,10 @@ function App() {
           )}
         </div>
 
-        <CourseForm
-          editingCourse={editingCourse}
-          onSubmit={handleFormSubmit}
-          onCancel={() => setEditingCourse(null)}
-          submitting={submitting}
-          serverError={formError}
-        />
-
         <div className="toolbar">
+          <button className="btn btn--primary" onClick={handleOpenAddForm}>
+            ➕ Thêm môn học mới
+          </button>
           <SearchBox onSearch={handleSearch} />
         </div>
 
@@ -96,12 +112,26 @@ function App() {
           state={state}
           errorMessage={errorMessage}
           onRetry={refetch}
-          onEdit={setEditingCourse}
+          onEdit={handleEditCourse}
           onDelete={handleDelete}
         />
 
         <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title={editingCourse ? '✎ Chỉnh sửa môn học' : '➕ Thêm môn học mới'}
+      >
+        <CourseForm
+          editingCourse={editingCourse}
+          onSubmit={handleFormSubmit}
+          onCancel={handleCloseModal}
+          submitting={submitting}
+          serverError={formError}
+        />
+      </Modal>
     </div>
   );
 }

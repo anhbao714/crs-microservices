@@ -61,12 +61,7 @@ export default function CourseForm({
   };
 
   return (
-    <div className="form-section">
-      <h2 className="form-section__title">
-        {editingCourse ? '✎ Chỉnh sửa môn học' : '➕ Thêm môn học mới'}
-      </h2>
-
-      <form onSubmit={handleSubmit} className="form">
+    <form onSubmit={handleSubmit} className="form">
         <div className="form__group">
           <label htmlFor="tenMonHoc" className="form__label">
             Tên môn học
@@ -167,6 +162,5 @@ export default function CourseForm({
           )}
         </div>
       </form>
-    </div>
   );
 }
