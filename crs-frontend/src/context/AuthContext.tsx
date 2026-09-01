@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, type ReactNode } from 'react';
 import type { LoginResponse } from '../types/auth';
 
 interface AuthUser {
@@ -18,16 +18,21 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 const TOKEN_KEY = 'crs_token';
 const USER_KEY = 'crs_user';
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(null);
-
-  useEffect(() => {
+const getInitialUser = (): AuthUser | null => {
+  try {
     const savedUser = localStorage.getItem(USER_KEY);
     const savedToken = localStorage.getItem(TOKEN_KEY);
     if (savedUser && savedToken) {
-      setUser(JSON.parse(savedUser));
+      return JSON.parse(savedUser);
     }
-  }, []);
+  } catch {
+    // Ignore parse errors
+  }
+  return null;
+};
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<AuthUser | null>(getInitialUser());
 
   const login = (data: LoginResponse) => {
     localStorage.setItem(TOKEN_KEY, data.token);
