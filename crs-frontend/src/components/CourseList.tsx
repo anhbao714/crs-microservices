@@ -6,9 +6,18 @@ interface CourseListProps {
   state: LoadState;
   errorMessage: string;
   onRetry: () => void;
+  onEdit?: (course: Course) => void;
+  onDelete?: (course: Course) => void;
 }
 
-export default function CourseList({ courses, state, errorMessage, onRetry }: CourseListProps) {
+export default function CourseList({
+  courses,
+  state,
+  errorMessage,
+  onRetry,
+  onEdit,
+  onDelete,
+}: CourseListProps) {
   if (state === 'loading') {
     return (
       <div className="state">
@@ -63,6 +72,28 @@ export default function CourseList({ courses, state, errorMessage, onRetry }: Co
                 {isFull ? 'Het cho' : 'Con cho'}
               </span>
             </div>
+            {(onEdit || onDelete) && (
+              <div className="course-card__actions">
+                {onEdit && (
+                  <button
+                    type="button"
+                    className="btn btn--sm btn--secondary"
+                    onClick={() => onEdit(course)}
+                  >
+                    ✎ Sửa
+                  </button>
+                )}
+                {onDelete && (
+                  <button
+                    type="button"
+                    className="btn btn--sm btn--danger"
+                    onClick={() => onDelete(course)}
+                  >
+                    ✕ Xóa
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         );
       })}
