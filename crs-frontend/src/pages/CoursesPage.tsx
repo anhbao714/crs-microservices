@@ -15,10 +15,13 @@ export default function CoursesPage() {
   };
 
   return (
-    <div style={{ padding: 24, maxWidth: 800, margin: '0 auto' }}>
-      <h1>Danh sach mon hoc</h1>
+    <div style={{ padding: 24, maxWidth: 1000, margin: '0 auto' }}>
+      <div style={{ marginBottom: 28 }}>
+        <h1 style={{ marginBottom: 8, color: 'var(--text)' }}>📚 Danh sách môn học</h1>
+        <p style={{ color: 'var(--text-muted)', margin: 0 }}>Duyệt danh sách các môn học hiện có</p>
+      </div>
       <SearchBox onSearch={handleSearch} />
-      <div style={{ marginTop: 16 }}>
+      <div style={{ marginTop: 24 }}>
         <CourseList
           courses={courses}
           state={state}

@@ -22,7 +22,7 @@ export default function CourseList({
     return (
       <div className="state">
         <div className="spinner" />
-        Dang tai danh sach mon hoc...
+        Đang tải danh sách môn học...
       </div>
     );
   }
@@ -32,7 +32,7 @@ export default function CourseList({
       <div className="alert alert--column">
         <span>{errorMessage}</span>
         <button type="button" className="btn btn--danger" onClick={onRetry}>
-          Thu lai
+          Thử lại
         </button>
       </div>
     );
@@ -42,7 +42,7 @@ export default function CourseList({
     return (
       <div className="state">
         <span className="state__icon">&#128269;</span>
-        Khong tim thay mon hoc nao phu hop.
+        Không tìm thấy môn học nào phù hợp.
       </div>
     );
   }
@@ -66,10 +66,10 @@ export default function CourseList({
             </div>
             <div className="seat-info">
               <span>
-                Con lai {course.soChoConLai}/{course.soChoToiDa} cho
+                Còn lại {course.soChoConLai}/{course.soChoToiDa} chỗ
               </span>
               <span className={`seat-tag ${isFull ? 'seat-tag--full' : 'seat-tag--open'}`}>
-                {isFull ? 'Het cho' : 'Con cho'}
+                {isFull ? 'Hết chỗ' : 'Còn chỗ'}
               </span>
             </div>
             {(onEdit || onDelete) && (
@@ -80,7 +80,7 @@ export default function CourseList({
                     className="btn btn--sm btn--secondary"
                     onClick={() => onEdit(course)}
                   >
-                    ✎ Sửa
+                    ✏️ Chỉnh sửa
                   </button>
                 )}
                 {onDelete && (
@@ -89,7 +89,7 @@ export default function CourseList({
                     className="btn btn--sm btn--danger"
                     onClick={() => onDelete(course)}
                   >
-                    ✕ Xóa
+                    🗑️ Xóa
                   </button>
                 )}
               </div>

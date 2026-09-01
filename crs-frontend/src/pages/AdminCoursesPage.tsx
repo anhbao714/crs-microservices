@@ -31,7 +31,7 @@ export default function AdminCoursesPage() {
         if (firstFieldError) return firstFieldError;
       }
     }
-    return 'Da xay ra loi, vui long thu lai.';
+    return 'Đã xảy ra lỗi, vui lòng thử lại.';
   };
 
   const handleFormSubmit = async (values: CourseFormValues) => {
@@ -63,8 +63,11 @@ export default function AdminCoursesPage() {
   };
 
   return (
-    <div style={{ padding: 24, fontFamily: 'sans-serif', maxWidth: 800, margin: '0 auto' }}>
-      <h1>Quan ly mon hoc (Admin)</h1>
+    <div style={{ padding: 24, fontFamily: 'sans-serif', maxWidth: 1000, margin: '0 auto' }}>
+      <div style={{ marginBottom: 28 }}>
+        <h1 style={{ marginBottom: 8, color: 'var(--text)' }}>⚙️ Quản lý môn học</h1>
+        <p style={{ color: 'var(--text-muted)', margin: 0 }}>Thêm, sửa, xóa và quản lý các môn học trong hệ thống</p>
+      </div>
       <CourseForm
         editingCourse={editingCourse}
         onSubmit={handleFormSubmit}

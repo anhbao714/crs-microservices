@@ -26,7 +26,7 @@ export default function SearchBox({ onSearch, placeholder }: SearchBoxProps) {
         type="text"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
-        placeholder={placeholder ?? 'Tim kiem theo ten mon hoc...'}
+        placeholder={placeholder ?? 'Tìm kiếm theo tên môn học...'}
       />
       {inputValue && (
         <button

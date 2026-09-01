@@ -14,25 +14,64 @@ export default function Navbar() {
     <nav
       style={{
         display: 'flex',
-        gap: 16,
-        padding: 12,
-        borderBottom: '1px solid #ddd',
+        gap: 20,
+        padding: 16,
+        backgroundColor: 'var(--surface)',
+        borderBottom: '1px solid var(--border)',
         alignItems: 'center',
+        boxShadow: 'var(--shadow)',
       }}
     >
-      <Link to="/courses">Danh sach mon hoc</Link>
-      {isAuthenticated && user?.role === 'ADMIN' && <Link to="/admin/courses">Quan tri mon hoc</Link>}
-      {isAuthenticated && user?.role === 'STUDENT' && <Link to="/register-course">Dang ky hoc phan</Link>}
-      <div style={{ marginLeft: 'auto' }}>
+      <Link to="/courses" style={{ textDecoration: 'none', color: 'var(--text)', fontWeight: 600 }}>
+        📚 Danh sách môn học
+      </Link>
+      {isAuthenticated && user?.role === 'ADMIN' && (
+        <Link to="/admin/courses" style={{ textDecoration: 'none', color: 'var(--text)', fontWeight: 600 }}>
+          ⚙️ Quản trị môn học
+        </Link>
+      )}
+      {isAuthenticated && user?.role === 'STUDENT' && (
+        <Link to="/register-course" style={{ textDecoration: 'none', color: 'var(--text)', fontWeight: 600 }}>
+          ✍️ Đăng ký học phần
+        </Link>
+      )}
+      <div style={{ marginLeft: 'auto', display: 'flex', gap: 12, alignItems: 'center' }}>
         {isAuthenticated ? (
           <>
-            <span style={{ marginRight: 12 }}>
-              Xin chao, {user?.username} ({user?.role})
+            <span style={{ fontSize: 14, color: 'var(--text-muted)' }}>
+              👤 {user?.username} <span style={{ fontWeight: 600, color: 'var(--primary)' }}>({user?.role})</span>
             </span>
-            <button onClick={handleLogout}>Dang xuat</button>
+            <button
+              onClick={handleLogout}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: 'var(--danger)',
+                color: 'white',
+                border: 'none',
+                borderRadius: 4,
+                cursor: 'pointer',
+                fontWeight: 600,
+                fontSize: 14,
+              }}
+            >
+              Đăng xuất
+            </button>
           </>
         ) : (
-          <Link to="/login">Dang nhap</Link>
+          <Link
+            to="/login"
+            style={{
+              padding: '8px 16px',
+              backgroundColor: 'var(--primary)',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: 4,
+              fontWeight: 600,
+              fontSize: 14,
+            }}
+          >
+            Đăng nhập
+          </Link>
         )}
       </div>
     </nav>

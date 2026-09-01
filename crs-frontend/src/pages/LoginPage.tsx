@@ -25,7 +25,7 @@ export default function LoginPage() {
       if (axios.isAxiosError<ApiErrorResponse>(err) && err.response?.data?.message) {
         setError(err.response.data.message);
       } else {
-        setError('Dang nhap that bai, vui long thu lai.');
+        setError('Đăng nhập thất bại, vui lòng thử lại.');
       }
     } finally {
       setSubmitting(false);
@@ -33,33 +33,112 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ maxWidth: 360, margin: '80px auto', padding: 24, border: '1px solid #ddd', borderRadius: 8 }}>
-      <h2>Dang nhap he thong CRS</h2>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: 12 }}>
-          <label>Ten dang nhap</label>
-          <br />
-          <input
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            style={{ width: '100%', padding: '8px 4px', boxSizing: 'border-box' }}
-          />
-        </div>
-        <div style={{ marginBottom: 12 }}>
-          <label>Mat khau</label>
-          <br />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ width: '100%', padding: '8px 4px', boxSizing: 'border-box' }}
-          />
-        </div>
-        {error && <p style={{ color: '#b91c1c' }}>{error}</p>}
-        <button type="submit" disabled={submitting} style={{ width: '100%', padding: '8px' }}>
-          {submitting ? 'Dang xu ly...' : 'Dang nhap'}
-        </button>
-      </form>
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'var(--bg)',
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 400,
+          padding: 40,
+          backgroundColor: 'var(--surface)',
+          borderRadius: 12,
+          boxShadow: 'var(--shadow)',
+          border: '1px solid var(--border)',
+        }}
+      >
+        <h2 style={{ marginBottom: 28, color: 'var(--text)', textAlign: 'center' }}>🔐 Đăng nhập CRS</h2>
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: 20 }}>
+            <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: 'var(--text)', fontSize: 14 }}>
+              Tên đăng nhập
+            </label>
+            <input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Nhập tên đăng nhập"
+              style={{
+                width: '100%',
+                padding: '10px 12px',
+                boxSizing: 'border-box',
+                border: '1px solid var(--border)',
+                borderRadius: 6,
+                fontSize: 14,
+                backgroundColor: 'var(--bg)',
+                color: 'var(--text)',
+              }}
+            />
+          </div>
+          <div style={{ marginBottom: 24 }}>
+            <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: 'var(--text)', fontSize: 14 }}>
+              Mật khẩu
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Nhập mật khẩu"
+              style={{
+                width: '100%',
+                padding: '10px 12px',
+                boxSizing: 'border-box',
+                border: '1px solid var(--border)',
+                borderRadius: 6,
+                fontSize: 14,
+                backgroundColor: 'var(--bg)',
+                color: 'var(--text)',
+              }}
+            />
+          </div>
+          {error && (
+            <div
+              style={{
+                marginBottom: 16,
+                padding: 12,
+                backgroundColor: 'var(--danger-soft)',
+                color: 'var(--danger)',
+                borderRadius: 6,
+                fontSize: 14,
+              }}
+            >
+              {error}
+            </div>
+          )}
+          <button
+            type="submit"
+            disabled={submitting}
+            style={{
+              width: '100%',
+              padding: '12px',
+              backgroundColor: submitting ? 'var(--text-muted)' : 'var(--primary)',
+              color: 'white',
+              border: 'none',
+              borderRadius: 6,
+              fontWeight: 600,
+              fontSize: 16,
+              cursor: submitting ? 'not-allowed' : 'pointer',
+              transition: 'background-color 0.2s',
+            }}
+            onMouseEnter={(e) => {
+              if (!submitting) {
+                (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#4338ca';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!submitting) {
+                (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'var(--primary)';
+              }
+            }}
+          >
+            {submitting ? '⏳ Đang xử lý...' : '🔓 Đăng nhập'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

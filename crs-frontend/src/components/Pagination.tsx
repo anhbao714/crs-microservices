@@ -33,7 +33,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
         disabled={currentPage === 0}
         onClick={() => onPageChange(currentPage - 1)}
       >
-        &laquo; Trang truoc
+        &laquo; Trang trước
       </button>
 
       <div className="pagination__pages">
