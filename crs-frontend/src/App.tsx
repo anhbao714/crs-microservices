@@ -1,138 +1,41 @@
-import { useCallback, useState } from 'react';
-import axios from 'axios';
-import { useCourses } from './api/useCourses';
-import { createCourse, updateCourse, deleteCourse } from './api/courseApi';
-import SearchBox from './components/SearchBox';
-import CourseList from './components/CourseList';
-import Pagination from './components/Pagination';
-import CourseForm from './components/CourseForm';
-import Modal from './components/Modal';
-import type { Course, CourseFormValues } from './types/course';
-import type { ApiErrorResponse } from './types/apiError';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import LoginPage from './pages/LoginPage';
+import CoursesPage from './pages/CoursesPage';
+import AdminCoursesPage from './pages/AdminCoursesPage';
+import RegisterCoursePage from './pages/RegisterCoursePage';
+import Navbar from './components/Navbar';
 import './App.css';
 
 function App() {
-  const [keyword, setKeyword] = useState('');
-  const [page, setPage] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingCourse, setEditingCourse] = useState<Course | null>(null);
-  const [submitting, setSubmitting] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
-  const { courses, totalPages, state, errorMessage, refetch } = useCourses(keyword, page);
-
-  const handleSearch = useCallback((newKeyword: string) => {
-    setKeyword(newKeyword);
-    setPage(0);
-  }, []);
-
-  const extractErrorMessage = (err: unknown): string => {
-    if (axios.isAxiosError<ApiErrorResponse>(err)) {
-      const data = err.response?.data;
-      if (data?.message) return data.message;
-      if (data) {
-        const firstFieldError = Object.values(data).find((v) => typeof v === 'string');
-        if (firstFieldError) return firstFieldError;
-      }
-    }
-    return 'Đã xảy ra lỗi, vui lòng thử lại.';
-  };
-
-  const handleFormSubmit = async (values: CourseFormValues) => {
-    setSubmitting(true);
-    setFormError(null);
-    try {
-      if (editingCourse) {
-        await updateCourse(editingCourse.id, values);
-      } else {
-        await createCourse(values);
-      }
-      setEditingCourse(null);
-      setIsModalOpen(false);
-      refetch();
-    } catch (err) {
-      setFormError(extractErrorMessage(err));
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setEditingCourse(null);
-    setFormError(null);
-  };
-
-  const handleOpenAddForm = () => {
-    setEditingCourse(null);
-    setFormError(null);
-    setIsModalOpen(true);
-  };
-
-  const handleEditCourse = (course: Course) => {
-    setEditingCourse(course);
-    setFormError(null);
-    setIsModalOpen(true);
-  };
-
-  const handleDelete = async (course: Course) => {
-    if (!window.confirm(`Xóa môn học "${course.tenMonHoc}"?`)) return;
-    try {
-      await deleteCourse(course.id);
-      refetch();
-    } catch (err) {
-      alert(extractErrorMessage(err));
-    }
-  };
-
   return (
-    <div className="page">
-      <div className="page__inner">
-        <div className="page__header">
-          <div>
-            <h1 className="page__title">Quản lý môn học (Admin)</h1>
-            <p className="page__subtitle">Thêm, sửa, xóa và tìm kiếm môn học qua API Gateway</p>
-          </div>
-          {state === 'success' && (
-            <span className="badge">
-              <span className="badge__dot" />
-              {courses.length} môn học
-            </span>
-          )}
-        </div>
-
-        <div className="toolbar">
-          <button className="btn btn--primary" onClick={handleOpenAddForm}>
-            ➕ Thêm môn học mới
-          </button>
-          <SearchBox onSearch={handleSearch} />
-        </div>
-
-        <CourseList
-          courses={courses}
-          state={state}
-          errorMessage={errorMessage}
-          onRetry={refetch}
-          onEdit={handleEditCourse}
-          onDelete={handleDelete}
-        />
-
-        <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
-      </div>
-
-      <Modal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        title={editingCourse ? '✎ Chỉnh sửa môn học' : '➕ Thêm môn học mới'}
-      >
-        <CourseForm
-          editingCourse={editingCourse}
-          onSubmit={handleFormSubmit}
-          onCancel={handleCloseModal}
-          submitting={submitting}
-          serverError={formError}
-        />
-      </Modal>
-    </div>
+    <BrowserRouter>
+      <AuthProvider>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Navigate to="/courses" replace />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/courses" element={<CoursesPage />} />
+          <Route
+            path="/admin/courses"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <AdminCoursesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/register-course"
+            element={
+              <ProtectedRoute requiredRole="STUDENT">
+                <RegisterCoursePage />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
