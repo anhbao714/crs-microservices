@@ -8,14 +8,14 @@ const SIBLINGS = 1;
 
 function buildPageItems(currentPage: number, totalPages: number): (number | 'ellipsis')[] {
   const items: (number | 'ellipsis')[] = [];
-  const start = Math.max(1, currentPage - SIBLINGS);
-  const end = Math.min(totalPages - 2, currentPage + SIBLINGS);
+  const start = Math.max(0, currentPage - SIBLINGS);
+  const end = Math.min(totalPages - 1, currentPage + SIBLINGS);
 
-  items.push(0);
+  if (start > 0) items.push(0);
   if (start > 1) items.push('ellipsis');
   for (let p = start; p <= end; p++) items.push(p);
   if (end < totalPages - 2) items.push('ellipsis');
-  if (totalPages > 1) items.push(totalPages - 1);
+  if (end < totalPages - 1) items.push(totalPages - 1);
 
   return items;
 }
