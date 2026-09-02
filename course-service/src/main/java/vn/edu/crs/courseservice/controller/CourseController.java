@@ -26,8 +26,14 @@ public class CourseController {
             @RequestParam(required = false) String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "9") int size) {
-        Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size, org.springframework.data.domain.Sort.by("id").ascending());
-        return courseService.search(keyword, pageable);
+        System.out.println("\n=== [CourseController.search] START ===");
+        System.out.println("Received params: keyword='" + keyword + "', page=" + page + ", size=" + size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id"));
+        System.out.println("Pageable created: pageNumber=" + pageable.getPageNumber() + ", pageSize=" + pageable.getPageSize() + ", offset=" + pageable.getOffset());
+        Page<CourseResponse> result = courseService.search(keyword, pageable);
+        System.out.println("Result: returned " + result.getContent().size() + " items, totalElements=" + result.getTotalElements() + ", totalPages=" + result.getTotalPages());
+        System.out.println("=== [CourseController.search] END ===\n");
+        return result;
     }
 
     @GetMapping("/{id}")
