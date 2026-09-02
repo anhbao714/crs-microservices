@@ -2,6 +2,7 @@ package vn.edu.crs.courseservice.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,11 @@ public class CourseController {
     }
 
     @GetMapping
-    public Page<CourseResponse> search(@RequestParam(required = false) String keyword, Pageable pageable) {
+    public Page<CourseResponse> search(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) {
+        Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
         return courseService.search(keyword, pageable);
     }
 
