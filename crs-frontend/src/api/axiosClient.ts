@@ -19,9 +19,11 @@ axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (axios.isAxiosError(error)) {
-      console.log('[Interceptor] Error status:', error.response?.status);
-      if (error.response?.status === 401) {
-        console.log('[Interceptor] 401 detected - clearing storage and redirecting');
+      const status = error.response?.status;
+      console.log('[Interceptor] Error status:', status);
+      // Handle both 401 (auth failed) and 403 with invalid token (auth error)
+      if (status === 401 || (status === 403 && !localStorage.getItem('crs_user'))) {
+        console.log(`[Interceptor] ${status} detected - clearing storage and redirecting`);
         localStorage.removeItem('crs_token');
         localStorage.removeItem('crs_user');
         // Dispatch custom event for AuthContext to listen and update state
