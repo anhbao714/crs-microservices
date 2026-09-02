@@ -51,7 +51,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             } catch (Exception e) {
                 SecurityContextHolder.clearContext();
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json;charset=UTF-8");
                 response.getWriter().write("{\"error\": \"Invalid or expired token\"}");
+                response.getWriter().flush();
                 return;
             }
         }

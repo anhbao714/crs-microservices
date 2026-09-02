@@ -18,16 +18,21 @@ axiosClient.interceptors.request.use((config) => {
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (axios.isAxiosError(error) && error.response?.status === 401) {
-      localStorage.removeItem('crs_token');
-      localStorage.removeItem('crs_user');
-      // Dispatch custom event for AuthContext to listen and update state
-      window.dispatchEvent(new CustomEvent('unauthorized'));
-      // Redirect to login if not already there
-      if (window.location.pathname !== '/login') {
-        setTimeout(() => {
-          window.location.href = '/login';
-        }, 0);
+    if (axios.isAxiosError(error)) {
+      console.log('[Interceptor] Error status:', error.response?.status);
+      if (error.response?.status === 401) {
+        console.log('[Interceptor] 401 detected - clearing storage and redirecting');
+        localStorage.removeItem('crs_token');
+        localStorage.removeItem('crs_user');
+        // Dispatch custom event for AuthContext to listen and update state
+        window.dispatchEvent(new CustomEvent('unauthorized'));
+        // Redirect to login if not already there
+        if (window.location.pathname !== '/login') {
+          console.log('[Interceptor] Redirecting to /login');
+          setTimeout(() => {
+            window.location.href = '/login';
+          }, 0);
+        }
       }
     }
     return Promise.reject(error);
