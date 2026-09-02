@@ -8,7 +8,8 @@
       "Bash(curl -s \"http://localhost:8080/api/courses?keyword=&page=1&size=9\")",
       "Bash(curl -s \"http://localhost:8080/api/courses?keyword=&page=2&size=9\")",
       "PowerShell(Get-Process java | Where-Object {$_.ProcessName -eq \"java\"} | Stop-Process -Force)",
-      "Bash(curl -s \"http://localhost:5173/courses\")"
+      "Bash(curl -s \"http://localhost:5173/courses\")",
+      "Bash(curl -s -X POST http://localhost:8080/api/registrations -H 'Content-Type: application/json' -d '{\"studentId\": 1, \"courseId\": 3}' -H 'Authorization: Bearer test')"
     ]
   }
 }

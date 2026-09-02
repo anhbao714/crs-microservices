@@ -30,7 +30,11 @@ export default function RegisterCoursePage() {
   }, []);
 
   const handleRegister = async (course: Course) => {
-    if (!user) return;
+    if (!user) {
+      showToast('Vui lòng login trước', 'error');
+      return;
+    }
+    console.log(`[RegisterCoursePage] Registering - user:`, user, 'studentId:', user.id, 'courseId:', course.id);
     setRegisteringId(course.id);
     try {
       await registerCourse({ studentId: user.id, courseId: course.id });
