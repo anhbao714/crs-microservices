@@ -61,9 +61,13 @@ public class CourseService {
     }
 
     public Page<CourseResponse> search(String keyword, Pageable pageable) {
+        System.out.println("[CourseService.search] keyword=" + keyword + ", pageable=" + pageable);
+        System.out.println("  page=" + pageable.getPageNumber() + ", size=" + pageable.getPageSize() + ", offset=" + pageable.getOffset());
         Page<Course> page = (keyword == null || keyword.isBlank())
                 ? courseRepository.findAll(pageable)
                 : courseRepository.findByTenMonHocContainingIgnoreCase(keyword, pageable);
+        System.out.println("[CourseService.search] Returned " + page.getContent().size() + " courses, totalElements=" + page.getTotalElements());
+        page.getContent().forEach(c -> System.out.println("  Course: id=" + c.getId() + ", tenMonHoc=" + c.getTenMonHoc()));
         return page.map(this::toResponse);
     }
 

@@ -19,6 +19,11 @@ export default function AdminCoursesPage() {
   const [formError, setFormError] = useState<string | null>(null);
   const { courses, totalPages, state, errorMessage, refetch } = useCourses(keyword, page);
 
+  const handlePageChange = (newPage: number) => {
+    console.log(`[AdminCoursesPage] setPage called with: ${newPage}, current courses: ${courses.map((c) => c.id).join(',')}`);
+    setPage(newPage);
+  };
+
   const handleSearch = (newKeyword: string) => {
     setKeyword(newKeyword);
     setPage(0);
@@ -112,7 +117,7 @@ export default function AdminCoursesPage() {
           onDelete={handleDelete}
         />
       </div>
-      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
 
       <Modal
         isOpen={isModalOpen}

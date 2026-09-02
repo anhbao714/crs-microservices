@@ -25,13 +25,18 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
 
   const items = buildPageItems(currentPage, totalPages);
 
+  const handlePageChange = (page: number) => {
+    console.log(`[Pagination] Changing page from ${currentPage} to ${page}`);
+    onPageChange(page);
+  };
+
   return (
     <div className="pagination">
       <button
         type="button"
         className="pagination__nav"
         disabled={currentPage === 0}
-        onClick={() => onPageChange(currentPage - 1)}
+        onClick={() => handlePageChange(currentPage - 1)}
       >
         &laquo; Trang trước
       </button>
@@ -47,7 +52,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
               key={item}
               type="button"
               className={`pagination__page${item === currentPage ? ' pagination__page--active' : ''}`}
-              onClick={() => onPageChange(item)}
+              onClick={() => handlePageChange(item as number)}
             >
               {item + 1}
             </button>
@@ -59,7 +64,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
         type="button"
         className="pagination__nav"
         disabled={currentPage >= totalPages - 1}
-        onClick={() => onPageChange(currentPage + 1)}
+        onClick={() => handlePageChange(currentPage + 1)}
       >
         Trang sau &raquo;
       </button>

@@ -21,9 +21,11 @@ export function useCourses(keyword: string, page: number, size = 9) {
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const fetchCourses = useCallback(() => {
+    console.log(`[useCourses] Fetching courses with keyword="${keyword}", page=${page}, size=${size}`);
     setState('loading');
     Promise.all([getCourses(keyword, page, size), wait(MIN_LOADING_MS)])
       .then(([res]) => {
+        console.log(`[useCourses] API returned ${res.data.content.length} courses, totalPages=${res.data.totalPages}`);
         const data = res.data;
         setCourses(data.content);
         setTotalPages(data.totalPages);

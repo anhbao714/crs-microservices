@@ -31,9 +31,14 @@ export default function Navbar() {
         </Link>
       )}
       {isAuthenticated && user?.role === 'STUDENT' && (
-        <Link to="/register-course" style={{ textDecoration: 'none', color: 'var(--text)', fontWeight: 600 }}>
-          ✍️ Đăng ký học phần
-        </Link>
+        <>
+          <Link to="/register-course" style={{ textDecoration: 'none', color: 'var(--text)', fontWeight: 600 }}>
+            ✍️ Đăng ký học phần
+          </Link>
+          <Link to="/my-registrations" style={{ textDecoration: 'none', color: 'var(--text)', fontWeight: 600 }}>
+            📚 Môn học đã đăng ký
+          </Link>
+        </>
       )}
       <div style={{ marginLeft: 'auto', display: 'flex', gap: 12, alignItems: 'center' }}>
         {isAuthenticated ? (

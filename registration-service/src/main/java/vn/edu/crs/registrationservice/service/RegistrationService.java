@@ -7,6 +7,7 @@ import vn.edu.crs.registrationservice.entity.Registration;
 import vn.edu.crs.registrationservice.repository.RegistrationRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -52,5 +53,9 @@ public class RegistrationService {
         courseClient.releaseSeat(registration.getCourseId());
         registration.setTrangThai(DA_HUY);
         registrationRepository.save(registration);
+    }
+
+    public List<Registration> getMyRegistrations(Long studentId) {
+        return registrationRepository.findByStudentId(studentId);
     }
 }

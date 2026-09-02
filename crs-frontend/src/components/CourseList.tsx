@@ -8,6 +8,8 @@ interface CourseListProps {
   onRetry: () => void;
   onEdit?: (course: Course) => void;
   onDelete?: (course: Course) => void;
+  onRegister?: (course: Course) => void;
+  registeringId?: number | null;
 }
 
 export default function CourseList({
@@ -17,6 +19,8 @@ export default function CourseList({
   onRetry,
   onEdit,
   onDelete,
+  onRegister,
+  registeringId,
 }: CourseListProps) {
   if (state === 'loading') {
     return (
@@ -72,7 +76,7 @@ export default function CourseList({
                 {isFull ? 'Hết chỗ' : 'Còn chỗ'}
               </span>
             </div>
-            {(onEdit || onDelete) && (
+            {(onEdit || onDelete || onRegister) && (
               <div className="course-card__actions">
                 {onEdit && (
                   <button
@@ -90,6 +94,20 @@ export default function CourseList({
                     onClick={() => onDelete(course)}
                   >
                     🗑️ Xóa
+                  </button>
+                )}
+                {onRegister && (
+                  <button
+                    type="button"
+                    className="btn btn--sm btn--primary"
+                    onClick={() => onRegister(course)}
+                    disabled={isFull || registeringId === course.id}
+                  >
+                    {registeringId === course.id
+                      ? '⏳ Đang đăng ký...'
+                      : isFull
+                        ? 'Hết chỗ'
+                        : '✍️ Đăng ký'}
                   </button>
                 )}
               </div>
