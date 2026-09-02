@@ -21,8 +21,13 @@ axiosClient.interceptors.response.use(
     if (axios.isAxiosError(error) && error.response?.status === 401) {
       localStorage.removeItem('crs_token');
       localStorage.removeItem('crs_user');
+      // Dispatch custom event for AuthContext to listen and update state
+      window.dispatchEvent(new CustomEvent('unauthorized'));
+      // Redirect to login if not already there
       if (window.location.pathname !== '/login') {
-        window.location.href = '/login';
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 0);
       }
     }
     return Promise.reject(error);

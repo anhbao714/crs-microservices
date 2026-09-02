@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import type { LoginResponse } from '../types/auth';
 
 interface AuthUser {
@@ -33,6 +33,16 @@ const getInitialUser = (): AuthUser | null => {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(getInitialUser());
+
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      setUser(null);
+    };
+    window.addEventListener('unauthorized', handleUnauthorized);
+    return () => {
+      window.removeEventListener('unauthorized', handleUnauthorized);
+    };
+  }, []);
 
   const login = (data: LoginResponse) => {
     localStorage.setItem(TOKEN_KEY, data.token);
