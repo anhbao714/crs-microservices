@@ -11,7 +11,18 @@
       "Bash(curl -s \"http://localhost:5173/courses\")",
       "Bash(curl -s -X POST http://localhost:8080/api/registrations -H 'Content-Type: application/json' -d '{\"studentId\": 1, \"courseId\": 3}' -H 'Authorization: Bearer test')",
       "Bash(curl -s http://localhost:8080/api/registrations/my -H 'Authorization: Bearer test')",
-      "PowerShell(Get-Process java | Where-Object {$_.Handles -gt 1000} | Stop-Process -Force)"
+      "PowerShell(Get-Process java | Where-Object {$_.Handles -gt 1000} | Stop-Process -Force)",
+      "Bash(awk '{print $2}')",
+      "Bash(xargs kill -9)",
+      "Bash(rm -rf target)",
+      "Bash(mvn package *)",
+      "Bash(pkill -9 java)",
+      "PowerShell(cd d:\\\\VSCode\\\\crs-microservices\\\\registration-service; $env:SERVER_PORT=8084; .\\\\mvnw.cmd spring-boot:run -Dspring-boot.run.arguments=\"--server.port=8084\")",
+      "Bash(.\\\\mvnw.cmd clean *)",
+      "Bash(Select-String -Pattern \"\\(BUILD|ERROR|WARNING\\)\")",
+      "PowerShell(Get-Process | Where-Object {$_.ProcessName -match \"java\"} | Stop-Process -Force)",
+      "PowerShell(Get-Process | Where-Object {$_.ProcessName -match \"java\"} | Stop-Process -Force; Start-Sleep -Seconds 2; Get-NetTCPConnection -LocalPort @\\(8080,8081,8082,8084\\) 2>$null | Select-Object -Property LocalPort, State)",
+      "Bash(.\\\\mvnw.cmd spring-boot:run)"
     ]
   }
 }

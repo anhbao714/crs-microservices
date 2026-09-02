@@ -1,5 +1,7 @@
 package vn.edu.crs.registrationservice.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import vn.edu.crs.registrationservice.client.CourseClient;
 import vn.edu.crs.registrationservice.dto.RegistrationRequest;
@@ -13,6 +15,7 @@ import java.util.NoSuchElementException;
 @Service
 public class RegistrationService {
 
+    private static final Logger logger = LoggerFactory.getLogger(RegistrationService.class);
     private static final String DA_DANG_KY = "DA_DANG_KY";
     private static final String DA_HUY = "DA_HUY";
 
@@ -25,6 +28,7 @@ public class RegistrationService {
     }
 
     public Registration register(RegistrationRequest request) {
+        logger.info("[RegistrationService] Registering - studentId: {}, courseId: {}", request.getStudentId(), request.getCourseId());
         if (registrationRepository.existsByStudentIdAndCourseIdAndTrangThai(
                 request.getStudentId(), request.getCourseId(), DA_DANG_KY)) {
             throw new IllegalStateException("Sinh vien da dang ky mon hoc nay roi");
@@ -38,7 +42,9 @@ public class RegistrationService {
         registration.setCourseId(request.getCourseId());
         registration.setTrangThai(DA_DANG_KY);
         registration.setNgayDangKy(LocalDateTime.now());
-        return registrationRepository.save(registration);
+        Registration saved = registrationRepository.save(registration);
+        logger.info("[RegistrationService] Registration saved - id: {}, studentId: {}, courseId: {}", saved.getId(), saved.getStudentId(), saved.getCourseId());
+        return saved;
     }
 
     public void cancel(Long registrationId) {
