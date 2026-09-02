@@ -61,13 +61,16 @@ public class CourseService {
     }
 
     public Page<CourseResponse> search(String keyword, Pageable pageable) {
-        System.out.println("[CourseService.search] keyword=" + keyword + ", pageable=" + pageable);
-        System.out.println("  page=" + pageable.getPageNumber() + ", size=" + pageable.getPageSize() + ", offset=" + pageable.getOffset());
+        System.out.println("  [Service] Using " + (keyword == null || keyword.isBlank() ? "findAll" : "findByKeyword") + " method");
+        System.out.println("  [Service] Pageable: pageNumber=" + pageable.getPageNumber() + ", pageSize=" + pageable.getPageSize() + ", offset=" + pageable.getOffset());
+
         Page<Course> page = (keyword == null || keyword.isBlank())
                 ? courseRepository.findAll(pageable)
                 : courseRepository.findByTenMonHocContainingIgnoreCase(keyword, pageable);
-        System.out.println("[CourseService.search] Returned " + page.getContent().size() + " courses, totalElements=" + page.getTotalElements());
-        page.getContent().forEach(c -> System.out.println("  Course: id=" + c.getId() + ", tenMonHoc=" + c.getTenMonHoc()));
+
+        System.out.println("  [Service] DB returned: " + page.getContent().size() + " courses out of " + page.getTotalElements() + " total");
+        System.out.println("  [Service] Course IDs: " + page.getContent().stream().map(c -> c.getId()).collect(java.util.stream.Collectors.toList()));
+
         return page.map(this::toResponse);
     }
 

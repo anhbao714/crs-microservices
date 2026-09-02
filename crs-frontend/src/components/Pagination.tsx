@@ -26,7 +26,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
   const items = buildPageItems(currentPage, totalPages);
 
   const handlePageChange = (page: number) => {
-    console.log(`[Pagination] Changing page from ${currentPage} to ${page}`);
+    console.log(`[Pagination] Button clicked: page=${page}, currentPage=${currentPage}`);
     onPageChange(page);
   };
 

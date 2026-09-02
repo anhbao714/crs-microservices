@@ -8,5 +8,5 @@ import vn.edu.crs.courseservice.entity.Course;
 public interface CourseRepository extends JpaRepository<Course, Long> {
     boolean existsByTenMonHocIgnoreCase(String tenMonHoc);
 
-    Page<Course> findByTenMonHocContainingIgnoreCase(String keyword, Pageable pageable);
+    Page<Course> findByTenMonHocContainingIgnoreCase(String tenMonHoc, Pageable pageable);
 }

@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s \"http://localhost:5173/courses\" -H \"User-Agent: Mozilla/5.0\")",
+      "Bash(node C:\\\\Users\\\\Admin\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--VSCode-crs-microservices\\\\b52f03db-62d2-4bda-b27d-a694f91059fe\\\\scratchpad\\\\test-pagination.js)",
+      "Bash(curl -s \"http://localhost:8080/api/courses?page=2&size=9\")",
+      "Bash(curl -s \"http://localhost:8080/api/courses?keyword=&page=0&size=9\")",
+      "Bash(curl -s \"http://localhost:8080/api/courses?keyword=&page=1&size=9\")",
+      "Bash(curl -s \"http://localhost:8080/api/courses?keyword=&page=2&size=9\")",
+      "PowerShell(Get-Process java | Where-Object {$_.ProcessName -eq \"java\"} | Stop-Process -Force)",
+      "Bash(curl -s \"http://localhost:5173/courses\")"
+    ]
+  }
+}
