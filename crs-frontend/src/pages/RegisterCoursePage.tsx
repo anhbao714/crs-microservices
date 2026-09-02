@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import axios from 'axios';
 import { useCourses } from '../api/useCourses';
 import { registerCourse } from '../api/registrationApi';
@@ -19,15 +19,15 @@ export default function RegisterCoursePage() {
   const { toast, showToast, clearToast } = useToast();
   const { courses, totalPages, state, errorMessage, refetch } = useCourses(keyword, page);
 
-  const handlePageChange = (newPage: number) => {
+  const handlePageChange = useCallback((newPage: number) => {
     console.log(`[RegisterCoursePage] setPage called with: ${newPage}`);
     setPage(newPage);
-  };
+  }, []);
 
-  const handleSearch = (newKeyword: string) => {
+  const handleSearch = useCallback((newKeyword: string) => {
     setKeyword(newKeyword);
     setPage(0);
-  };
+  }, []);
 
   const handleRegister = async (course: Course) => {
     if (!user) return;

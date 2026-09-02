@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import axios from 'axios';
 import { useCourses } from '../api/useCourses';
 import { createCourse, updateCourse, deleteCourse } from '../api/courseApi';
@@ -19,15 +19,15 @@ export default function AdminCoursesPage() {
   const [formError, setFormError] = useState<string | null>(null);
   const { courses, totalPages, state, errorMessage, refetch } = useCourses(keyword, page);
 
-  const handlePageChange = (newPage: number) => {
+  const handlePageChange = useCallback((newPage: number) => {
     console.log(`[AdminCoursesPage] setPage called with: ${newPage}, current courses: ${courses.map((c) => c.id).join(',')}`);
     setPage(newPage);
-  };
+  }, [courses]);
 
-  const handleSearch = (newKeyword: string) => {
+  const handleSearch = useCallback((newKeyword: string) => {
     setKeyword(newKeyword);
     setPage(0);
-  };
+  }, []);
 
   const extractErrorMessage = (err: unknown): string => {
     if (axios.isAxiosError<ApiErrorResponse>(err)) {
