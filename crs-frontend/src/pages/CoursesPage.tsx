@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useCourses } from '../api/useCourses';
 import SearchBox from '../components/SearchBox';
 import CourseList from '../components/CourseList';
@@ -9,10 +9,10 @@ export default function CoursesPage() {
   const [page, setPage] = useState(0);
   const { courses, totalPages, state, errorMessage, refetch } = useCourses(keyword, page);
 
-  const handleSearch = (newKeyword: string) => {
+  const handleSearch = useCallback((newKeyword: string) => {
     setKeyword(newKeyword);
     setPage(0);
-  };
+  }, []);
 
   return (
     <div style={{ padding: 24, maxWidth: 1000, margin: '0 auto' }}>
