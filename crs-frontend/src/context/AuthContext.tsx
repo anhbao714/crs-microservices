@@ -46,8 +46,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = (data: LoginResponse) => {
+    console.log('[AuthContext.login] Received data:', data, 'userId:', data.userId);
     localStorage.setItem(TOKEN_KEY, data.token);
     const authUser: AuthUser = { id: data.userId, username: data.username, role: data.role };
+    console.log('[AuthContext.login] Created authUser:', authUser);
     localStorage.setItem(USER_KEY, JSON.stringify(authUser));
     setUser(authUser);
   };
